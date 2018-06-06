@@ -7,11 +7,11 @@ let promise = new Promise((resolve, reject) => {
     });
 });
 
-function f1(data) {
+function successLog(data) {
     console.log(data)
 }
 
 function errorLog(error) {
     console.log(error)
 }
-promise.then(f1, errorLog);
+promise.then(successLog, errorLog);

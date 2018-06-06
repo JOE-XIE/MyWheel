@@ -5,11 +5,11 @@ let promise = new Promise((resolve, reject) => {
     resolve("同步任务执行")
 });
 
-function f1(data) {
+function successLog(data) {
     console.log(data)
 }
 
 function errorLog(error) {
     console.log(error)
 }
-promise.then(f1, errorLog);
+promise.then(successLog, errorLog);
