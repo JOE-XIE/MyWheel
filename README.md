@@ -1,15 +1,18 @@
+> 本文是一起学习造轮子系列的第一篇，本篇我们将从零开始写一个符合Promises/A+规范的promise，本系列文章将会选取一些前端比较经典的轮子进行源码分析，并且从零开始逐步实现，本系列将会学习Promises/A+，Redux，react-redux，vue，dom-diff，webpack，babel，kao，express，async/await，jquery，Lodash，requirejs，lib-flexible等前端经典轮子的实现方式，欢迎关注~ <br>
+相关系列文章：<br>
+[一起学习造轮子（一）：从零开始写一个符合Promises/A+规范的promise](https://juejin.im/post/5b16800fe51d4506ae719bae)<br>
+[一起学习造轮子（二）：从零开始写一个小巧完整的Redux](https://juejin.im/post/5b29025ee51d4558b64f10bf)
 # 前言
 Promise 是异步编程的一种解决方案，比传统的解决方案回调函数和事件更合理更强大。它由社区最早提出和实现，ES6 将其写进了语言标准，统一了用法，原生提供了Promise对象。本篇不注重讲解promise的用法，关于用法，可以看阮一峰老师的ECMAScript 6系列里面的Promise部分：<br/>
 
 [ECMAScript 6 : Promise对象](http://es6.ruanyifeng.com/#docs/promise)<br/>
 
-本篇主要讲解如何从零开始一步步的实现promise各项特性及功能，最终使其符合Promises/A+规范。
-每一步的项目源码都在github上，可以对照参考，每一步都有对应的项目代码及测试代码，喜欢的话，欢迎给个star~<br/>
+本篇主要讲解如何从零开始一步步的实现promise各项特性及功能，最终使其符合Promises/A+规范，因为讲解较细，所以文章略长。
+另外，每一步的项目源码都在github上，可以对照参考，每一步都有对应的项目代码及测试代码，喜欢的话，欢迎给个star~<br/>
 
 项目地址：[本文代码的github仓库](https://github.com/JOE-XIE/MyPromise)
 
 ![代码仓库](https://user-gold-cdn.xitu.io/2018/6/6/163d57b4b1e6251a?w=801&h=412&f=png&s=29128)
-
 # 开始
 本文promise里用到的异步操作的示例都是使用的node里面的fs.readFile方法，在浏览器端可以使用setTimeout方法进行模拟异步操作。<br/>
 ## 一. 基础版本
@@ -647,6 +650,4 @@ MyPromise.promisify = function(fn) {
 项目地址：[本文代码的github仓库](https://github.com/JOE-XIE/MyPromise)<br>
 
 另外，实现一个符合Promises/A+规范的promise不止本文一种实现方式，本文只是选取了一种比较通俗易懂的实现方式作为讲解，大家也可以用自己的方式去实现一个符合Promises/A+规范的promise。
-
-最后，本人会不定期分享一些分析框架，轮子原理及实现的文章，下一期将会从redux，webpack，koa，async/await这四个专题中选一个从零实现一下，有兴趣可以关注~
 
