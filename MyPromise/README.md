@@ -1,7 +1,9 @@
-> 本文是一起学习造轮子系列的第一篇，本篇我们将从零开始写一个符合Promises/A+规范的promise，本系列文章将会选取一些前端比较经典的轮子进行源码分析，并且从零开始逐步实现，本系列将会学习Promises/A+，Redux，react-redux，vue，dom-diff，webpack，babel，kao，express，async/await，jquery，Lodash，requirejs，lib-flexible等前端经典轮子的实现方式，欢迎关注~ <br>
+> 本文是一起学习造轮子系列的第一篇，本篇我们将从零开始写一个符合Promises/A+规范的promise，本系列文章将会选取一些前端比较经典的轮子进行源码分析，并且从零开始逐步实现，本系列将会学习Promises/A+，Redux，react-redux，vue，dom-diff，webpack，babel，kao，express，async/await，jquery，Lodash，requirejs，lib-flexible等前端经典轮子的实现方式，每一章源码都托管在github上，欢迎关注~ <br>
 相关系列文章：<br>
 [一起学习造轮子（一）：从零开始写一个符合Promises/A+规范的promise](https://juejin.im/post/5b16800fe51d4506ae719bae)<br>
-[一起学习造轮子（二）：从零开始写一个小巧完整的Redux](https://juejin.im/post/5b29025ee51d4558b64f10bf)
+[一起学习造轮子（二）：从零开始写一个小巧完整的Redux](https://juejin.im/post/5b29025ee51d4558b64f10bf)<br>
+系列github代码仓库：<br>
+[一起学习造轮子系列github](https://github.com/JOE-XIE/MyWheel)
 # 前言
 Promise 是异步编程的一种解决方案，比传统的解决方案回调函数和事件更合理更强大。它由社区最早提出和实现，ES6 将其写进了语言标准，统一了用法，原生提供了Promise对象。本篇不注重讲解promise的用法，关于用法，可以看阮一峰老师的ECMAScript 6系列里面的Promise部分：<br/>
 
@@ -10,7 +12,7 @@ Promise 是异步编程的一种解决方案，比传统的解决方案回调函
 本篇主要讲解如何从零开始一步步的实现promise各项特性及功能，最终使其符合Promises/A+规范，因为讲解较细，所以文章略长。
 另外，每一步的项目源码都在github上，可以对照参考，每一步都有对应的项目代码及测试代码，喜欢的话，欢迎给个star~<br/>
 
-项目地址：[本文代码的github仓库](https://github.com/JOE-XIE/MyPromise)
+项目地址：[本文代码的github仓库](https://github.com/JOE-XIE/MyWheel/tree/master/MyPromise)
 
 ![代码仓库](https://user-gold-cdn.xitu.io/2018/6/6/163d57b4b1e6251a?w=801&h=412&f=png&s=29128)
 # 开始
@@ -48,7 +50,7 @@ module.exports = MyPromise
 ```
 代码很短，逻辑也非常清晰，在then中注册了这个promise实例的成功回调和失败回调，当promise reslove时，就把异步执行结果赋值给promise实例的value，并把这个值传入成功回调中执行，失败就把异步执行失败原因赋值给promise实例的error，并把这个值传入失败回调并执行。<br/>
 ### 本节代码 <br/>
-[基础版本代码](https://github.com/JOE-XIE/MyPromise/tree/master/1.%E5%9F%BA%E7%A1%80%E7%89%88%E6%9C%AC)<br/>
+[基础版本代码](https://github.com/JOE-XIE/MyWheel/tree/master/MyPromise/1.%E5%9F%BA%E7%A1%80%E7%89%88%E6%9C%AC)<br/>
 ## 二. 支持同步任务
 我们知道，我们在使用es6 的promise时，可以传入一个异步任务，也可以传入一个同步任务，但是我们的上面基础版代码并不支持同步任务，如果我们这样写就会报错：
 ```
@@ -79,7 +81,7 @@ function reject(error) {
 实现很简单，就是在reslove和reject里面用setTimeout进行包裹，使其到then方法执行之后再去执行，这样我们就让promise支持传入同步方法，另外，关于这一点，Promise/A+规范里也明确要求了这一点。<br>
 `2.2.4 onFulfilled or onRejected must not be called until the execution context stack contains only platform code.`<br>
 ### 本节代码
-[支持同步任务代码](https://github.com/JOE-XIE/MyPromise/tree/master/2.%E6%94%AF%E6%8C%81%E5%90%8C%E6%AD%A5%E4%BB%BB%E5%8A%A1)
+[支持同步任务代码](https://github.com/JOE-XIE/MyWheel/tree/master/MyPromise/2.%E6%94%AF%E6%8C%81%E5%90%8C%E6%AD%A5%E4%BB%BB%E5%8A%A1)
 
 ## 三. 支持三种状态
 我们知道在使用promise时，promise有三种状态:pending（进行中）、fulfilled（已成功）和rejected（已失败）。只有异步操作的结果，可以决定当前是哪一种状态，任何其他操作都无法改变这个状态。另外，promise一旦状态改变，就不会再变，任何时候都可以得到这个结果promise对象的状态改变，只有两种可能：从pending变为fulfilled和从pending变为rejected。只要这两种情况发生，状态就凝固了，不会再变了，会一直保持这个结果，如果改变已经发生了，你再对promise对象添加回调函数，也会立即得到这个结果。<br/>
@@ -142,7 +144,7 @@ module.exports = MyPromise
 ```
 首先，我们建立了三种状态"pending","fulfilled","rejected",然后我们在reslove和reject中做判断，只有状态是pending时，才去改变promise的状态，并执行相应操作，另外，我们在then中判断，如果这个promise已经变为"fulfilled"或"rejected"就立刻执行它的回调，并把结果传入。 <br/>
 ### 本节代码
-[支持三种状态代码](https://github.com/JOE-XIE/MyPromise/tree/master/3.%E6%94%AF%E6%8C%81%E7%8A%B6%E6%80%81)
+[支持三种状态代码](https://github.com/JOE-XIE/MyWheel/tree/master/MyPromise/3.%E6%94%AF%E6%8C%81%E7%8A%B6%E6%80%81)
 ## 四. 支持链式操作
 我们平时写promise一般都是对应的一组流程化的操作，如这样：<br/>
 `promise.then(f1).then(f2).then(f3)`<br/>
@@ -174,7 +176,7 @@ MyPromise.prototype.then = function(onFulfilled, onRejected) {
 }
 ```
 ### 本节代码
-[支持链式操作代码](https://github.com/JOE-XIE/MyPromise/tree/master/4.%E6%94%AF%E6%8C%81%E9%93%BE%E5%BC%8F%E6%93%8D%E4%BD%9C)
+[支持链式操作代码](https://github.com/JOE-XIE/MyWheel/tree/master/MyPromise/4.%E6%94%AF%E6%8C%81%E9%93%BE%E5%BC%8F%E6%93%8D%E4%BD%9C)
 
 ## 五. 支持串行异步任务
 我们上一节实现了链式调用，但是目前then方法里只能传入同步任务，但是我们平常用promise，then方法里一般是异步任务，因为我们用promise主要用来解决一组流程化的异步操作，如下面这样的调取接口获取用户id后，再根据用户id调取接口获取用户余额，获取用户id和获取用户余额都需要调用接口，所以都是异步任务，如何使promise支持串行异步操作呢?<br/>
@@ -346,7 +348,7 @@ MyPromise.prototype.catch = function(onRejected) {
 ```
 到此，我们已经可以愉快的使用`promise.then(f1).then(f2).then(f3).catch(errorLog)`来顺序读取文件内容了。
 ### 本节代码
-[支持串行异步任务代码](https://github.com/JOE-XIE/MyPromise/tree/master/5.%E6%94%AF%E6%8C%81%E4%B8%B2%E8%A1%8C%E5%BC%82%E6%AD%A5%E4%BB%BB%E5%8A%A1)
+[支持串行异步任务代码](https://github.com/JOE-XIE/MyWheel/tree/master/MyPromise/5.%E6%94%AF%E6%8C%81%E4%B8%B2%E8%A1%8C%E5%BC%82%E6%AD%A5%E4%BB%BB%E5%8A%A1)
 
 ## 六. 达到Promises/A+规范
 其实，到支持串行异步任务这一节，我们写的promise在功能上已经基本齐全了，但是还不太规范，比如说一些其他情况的判断等等，这一节我们就比着Promises/A+的规范打磨一下我们写的promise。如果只是想学习promise的核心实现的，这一节看不懂也没关系，因为这一节并没有增加promise的功能，只是使promise更加规范，更加健壮。
@@ -560,7 +562,7 @@ else if (x != null && ((typeof x === 'object') || (typeof x === 'function'))) {
 ```
 再写完这个分支的代码后，其实我们已经可以删除`if (x instanceof MyPromise) {}`这个分支的代码，因为promise也是一个thenable对象，完全可以使用上述代码兼容代替。另外，本节代码很多重复代码可以封装优化一下，但是为了看得清晰，并没有进行抽象封装，大家如果觉得重复代码太多的话，可以自行抽象封装。
 ### 本节代码
-[达到Promises/A+规范代码](https://github.com/JOE-XIE/MyPromise/tree/master/6.%E8%BE%BE%E5%88%B0promiseA%2B%E8%A7%84%E8%8C%83)
+[达到Promises/A+规范代码](https://github.com/JOE-XIE/MyWheel/tree/master/MyPromise/6.%E8%BE%BE%E5%88%B0promiseA%2B%E8%A7%84%E8%8C%83)
 ## 七. 实现 promise 的all，race，resolve，reject方法
 上一节我们已经实现了一个符合Promises/A+规范的promise，本节我们把一些es6 promise里的常用方法实现一下。<br/>
 ### 目标
@@ -611,7 +613,7 @@ MyPromise.reject = function(error) {
 ```
 其实前几节把promise的主线逻辑实现后，这些方法都不难实现，all的原理就是返回一个promise，在这个promise中给所有传入的promise的then方法中都注册上回调，回调成功了就把值放到结果数组中，所有回调都成功了就让返回的这个promise去reslove，把结果数组返回出去，race和all大同小异，只不过它不会等所有promise都成功，而是谁快就把谁返回出去，resolve和reject的逻辑也很简单，看一下就明白了。
 ### 本节代码
-[实现all，race，resolve，reject方法代码](https://github.com/JOE-XIE/MyPromise/tree/master/7.%E5%AE%9E%E7%8E%B0all%EF%BC%8Crace%EF%BC%8Cresolve%EF%BC%8Creject%E7%AD%89%E6%96%B9%E6%B3%95)
+[实现all，race，resolve，reject方法代码](https://github.com/JOE-XIE/MyWheel/tree/master/MyPromise/7.%E5%AE%9E%E7%8E%B0all%EF%BC%8Crace%EF%BC%8Cresolve%EF%BC%8Creject%E7%AD%89%E6%96%B9%E6%B3%95)
 ## 八. 实现 promiseify 方法
 其实到上一节为止，promise的方法已经都讲完了，这一节讲一个著名promise库bluebird里面的方法promiseify，因为这个方法很常用而且以前面试还被问过。promiseify有什么作用呢？它的作用就是将异步回调函数api转换为promise形式，比如下面这个，对fs.readFile 执行promiseify后，就可以直接用promise的方式去调用读取文件的方法了，是不是很强大。
 ```
@@ -642,12 +644,12 @@ MyPromise.promisify = function(fn) {
 虽然方法很强大，但是实现起来并没有很难，想在外边直接调用promise的方法那就返回一个promise呗，内部将原来参数后面拼接一个回调函数参数，在回调函数里执行这个promise的reslove方法把结果传出去，promiseify就实现了。
 
 ### 本节代码
-[实现promiseify方法](https://github.com/JOE-XIE/MyPromise/tree/master/8.%E5%AE%9E%E7%8E%B0promiseify%E6%96%B9%E6%B3%95)
+[实现promiseify方法](https://github.com/JOE-XIE/MyWheel/tree/master/MyPromise/8.%E5%AE%9E%E7%8E%B0promiseify%E6%96%B9%E6%B3%95)
 
 # 最后
 不知不觉写了这么多了，大家如果觉得还可以就给个赞呗，另外每一节的代码都托管到了github上，大家可以对照看那一节的promise实现代码及测试代码，也顺便求个star~<br>
 
-项目地址：[本文代码的github仓库](https://github.com/JOE-XIE/MyPromise)<br>
+项目地址：[本文代码的github仓库](https://github.com/JOE-XIE/MyWheel/tree/master/MyPromise)<br>
 
 另外，实现一个符合Promises/A+规范的promise不止本文一种实现方式，本文只是选取了一种比较通俗易懂的实现方式作为讲解，大家也可以用自己的方式去实现一个符合Promises/A+规范的promise。
 
