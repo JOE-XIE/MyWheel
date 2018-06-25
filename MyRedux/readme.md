@@ -1,9 +1,9 @@
-> 本文是一起学习造轮子系列的第一篇，本篇我们将从零开始写一个符合Promises/A+规范的promise，本系列文章将会选取一些前端比较经典的轮子进行源码分析，并且从零开始逐步实现，本系列将会学习Promises/A+，Redux，react-redux，vue，dom-diff，webpack，babel，kao，express，async/await，jquery，Lodash，requirejs，lib-flexible等前端经典轮子的实现方式，每一章源码都托管在github上，欢迎关注~ <br>
+> 本文是一起学习造轮子系列的第二篇，本篇我们将从零开始写一个小巧完整的Redux，本系列文章将会选取一些前端比较经典的轮子进行源码分析，并且从零开始逐步实现，本系列将会学习Promises/A+，Redux，react-redux，vue，dom-diff，webpack，babel，kao，express，async/await，jquery，Lodash，requirejs，lib-flexible等前端经典轮子的实现方式，每一章源码都托管在github上，欢迎关注~ <br>
 相关系列文章：<br>
 [一起学习造轮子（一）：从零开始写一个符合Promises/A+规范的promise](https://juejin.im/post/5b16800fe51d4506ae719bae)<br>
 [一起学习造轮子（二）：从零开始写一个小巧完整的Redux](https://juejin.im/post/5b29025ee51d4558b64f10bf)<br>
-系列github代码仓库：<br>
-[一起学习造轮子系列github](https://github.com/JOE-XIE/MyWheel)
+本系列github仓库：<br>
+[一起学习造轮子系列github（欢迎star~）](https://github.com/JOE-XIE/MyWheel)
 # 前言
 Redux是JavaScript状态容器，提供可预测化的状态管理。本文将会详细介绍Redux五个核心方法
 createStore，applyMiddleware，bindActionCreators，combineReducers，compose的实现原理，最后将自己封装一个小巧完整的redux库，随后会介绍一下经常与Redux一起结合使用的Redux常用中间件redux-logger，redux-thunk，redux-promise等中间件的实现原理。<br>
