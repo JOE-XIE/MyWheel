@@ -2,6 +2,7 @@
 相关系列文章：<br>
 [一起学习造轮子（一）：从零开始写一个符合Promises/A+规范的promise](https://juejin.im/post/5b16800fe51d4506ae719bae)<br>
 [一起学习造轮子（二）：从零开始写一个小巧完整的Redux](https://juejin.im/post/5b29025ee51d4558b64f10bf)<br>
+[一起学习造轮子（三）：从零开始写一个React-Redux](https://juejin.im/post/5b32f145f265da596a3682b4)<br>
 系列github代码仓库：<br>
 [一起学习造轮子系列github](https://github.com/JOE-XIE/MyWheel)
 # 前言
